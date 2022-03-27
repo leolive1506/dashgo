@@ -1,5 +1,5 @@
-import { Flex, Icon, Input, Text } from '@chakra-ui/react'
-import { RiSearchLine } from 'react-icons/ri'
+import { Flex, Icon, Input, HStack, Text, Box, Avatar } from '@chakra-ui/react'
+import { RiNotificationLine, RiSearchLine, RiUserAddLine } from 'react-icons/ri'
 function Header() {
   return (
     <Flex 
@@ -39,6 +39,39 @@ function Header() {
           _placeholder={{ color: 'gray.400' }}
         />
         <Icon as={RiSearchLine} fontSize="20" />
+      </Flex>
+
+      <Flex
+        align="center"
+        ml="auto"
+      >
+        {/* HStack deixa em row */}
+        <HStack 
+          spacing="8"
+          mx="8"
+          pr="8"
+          py="1"
+          color="gray.300"
+          borderRightWidth={1}
+          borderColor="gray.700"
+        >
+          <Icon as={ RiNotificationLine } fontSize="20" />
+          <Icon as={ RiUserAddLine } fontSize="20" />
+        </HStack>
+
+        {/* dados perfil */}
+        <Flex
+          align="center"
+        >
+          {/* box -> div sem estilização */}
+          <Box mr="4" textAlign="right">
+            <Text>Leonardo Lopes</Text>
+            <Text color="gray.300">leonardolivelopes2@gmail.com</Text>
+          </Box>
+
+          {/* avatar do chakra ui, quando não tem src pega name como referencia, quando tem ele carrega a foto */}
+          <Avatar size="md" name="Leonardo Lopes" />
+        </Flex>
       </Flex>
     </Flex>
   )
