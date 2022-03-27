@@ -65,3 +65,57 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 export default MyApp
 ```
+
+# Gráficos
+- Usando no app [Apexcharts](https://apexcharts.com/)
+```sh
+yarn add apexcharts react-apexcharts
+```
+
+- apexcharts
+  - Pode gerar erro 'window is not defined'
+  - Pq next faz carregamento no servidor next, la não tem window
+  - Fazer ele rodar somente no browser
+  ```ts
+  import dynamic from "next/dynamic"
+  // import Chart from 'react-apexcharts'
+
+  const Chart = dynamic(() => import('react-apexcharts'), {
+    // Chart é so recarregaod pelo lado do browser
+    ssr: false
+  })
+  ```
+
+- Usar
+```tsx
+import { theme } from "@chakra-ui/react"
+import dynamic from "next/dynamic"
+
+const Chart = dynamic(() => import('react-apexcharts'), {
+  ssr: false
+})
+
+// opcionamal, apenas pra estilo
+const options = {
+  chart: {
+    // remover menu de cima
+    toolbar: {
+      show: false
+    },
+    zoom: {
+      enabled: false
+    },
+    // cor texto dos numero
+    // theme de dentro @chakra-ui/react
+    foreColor: theme.colors.gray[500]
+  }
+}
+// dados
+const series = [
+  // como quer um tipo de dado, coloca apenas uma informação
+  { name: 'series1', data: [31, 120, 10, 28, 61, 18, 109]}
+]
+
+// no componente
+<Chart type="area" height={160} options={options} series={series} />
+```
