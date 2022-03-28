@@ -119,3 +119,24 @@ const series = [
 // no componente
 <Chart type="area" height={160} options={options} series={series} />
 ```
+
+# Dicas gerais
+- Tipar um elemento
+```tsx
+import { Icon, Link, Text } from "@chakra-ui/react";
+import { ElementType } from "react";
+
+interface NavLinkProps {
+  // ElementType -> quando passa o nome do componente e não a declaração dele
+  icon: ElementType
+  children: string
+}
+export function NavLink({ icon, children }: NavLinkProps) {
+  return (
+    <Link display="flex" alignItems="center" color="pink.400">
+      <Icon as={ icon } fontSize="20"/>
+      <Text ml="4" fontWeight="medium">{children}</Text>
+    </Link>
+  )
+}
+```
