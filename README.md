@@ -121,6 +121,38 @@ function Example() {
 ```
 
 # Criar um sidebar resonponsivo
+- useSidebarDrawer
+```tsx
+import { useDisclosure, UseDisclosureReturn } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { ReactNode, createContext, useContext, useEffect } from "react";
+
+interface SidebarDrawerProviderProps {
+  children: ReactNode
+}
+type SidebarDrawerContextData =  UseDisclosureReturn
+
+const SidebarDrawerContext = createContext({} as SidebarDrawerContextData)
+
+export function SidebarDrawerProvider({ children }: SidebarDrawerProviderProps) {
+  const disclosure = useDisclosure()
+  const router = useRouter()
+
+  // fechar sidebar quando clica em algum link
+  useEffect(() => {
+    disclosure.onClose()
+  }, [router.asPath])
+
+  return (
+    <SidebarDrawerContext.Provider value={disclosure}>
+      {children}
+    </SidebarDrawerContext.Provider>
+  )
+}
+
+export const useSidebarDrawer = () => useContext(SidebarDrawerContext)
+```
+
 - Componente sidebar
 ```tsx
 import { Box, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerBody, DrawerOverlay, useBreakpointValue } from "@chakra-ui/react"
@@ -166,6 +198,8 @@ export default Sidebar
 - Componente header (pra abri o sidebar)
 ```tsx
 function Header() {
+  const { onOpen } = useSidebarDrawer()
+
   return (
     <>
       { !isWideVersion && (
@@ -256,4 +290,11 @@ export function NavLink({ icon, children }: NavLinkProps) {
     </Link>
   )
 }
+```
+
+# Link
+- Quando passar um el sem ser o <a>, não mostra visualmente a rota no browser
+  - Passar propriedade passHref
+```tsx
+<Link href={href} passHref></Link>
 ```

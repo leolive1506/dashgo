@@ -84,7 +84,7 @@ function Dashboad() {
         {/* quando item menor 320px, quebra linha e coloca items a baixo */}
         <SimpleGrid flex="1" gap="4" minChildWidth="320px">  
           <Box
-            p="8"
+            p={["6", "8"]}
             bg="gray.800"
             borderRadius={8}
             pb="4"
@@ -95,7 +95,7 @@ function Dashboad() {
             <Chart type="area" height={160} options={options} series={series} />
           </Box>
           <Box
-            p="8"
+            p={["6", "8"]}
             bg="gray.800"
             borderRadius={8}
           >
