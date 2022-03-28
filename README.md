@@ -66,6 +66,59 @@ function MyApp({ Component, pageProps }: AppProps) {
 export default MyApp
 ```
 
+# [Responsividade chakra ui](https://chakra-ui.com/docs/styled-system/features/responsive-styles)
+- Breakpoint 
+```ts
+const breakpoints = {
+  sm: '30em',
+  md: '48em',
+  lg: '62em',
+  xl: '80em',
+  '2xl': '96em',
+}
+```
+- Ex fazendo na order dos breakpoints (sm, md, lg)
+```tsx
+// sm -> 2xl dps disso 3xl
+// pode fazer outras medias query
+<Text fontSize={["2xl", "3xl"]} fontWeight="bold" letterSpacing="tight" w="64"></Text>
+```
+- Ex sem seguir escolhendo breakpoints
+```tsx
+<Text fontSize={{ base: '24px', md: '40px', lg: '56px' }}>
+  This is responsive text
+</Text>
+```
+
+- useBreakopintValue
+  - Cria valor baseador se está em uma medida ou não
+```tsx
+import { useBreakpointValue } from '@chakra-ui/react'
+
+function Example() {
+  const variant = useBreakpointValue({ base: 'outline', md: 'solid' })
+}
+
+  return (
+      <Button colorScheme='teal' variant={variant}>
+        Button
+      </Button>
+  )
+```
+
+- useMediaQuery
+  - Cria valor baseador se está em uma medida ou não
+```tsx
+function Example() {
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
+
+  return (
+    <Text>
+      {isLargerThan1280 ? 'larger than 1280px' : 'smaller than 1280px'}
+    </Text>
+  )
+}
+```
 # Gráficos
 - Usando no app [Apexcharts](https://apexcharts.com/)
 ```sh
