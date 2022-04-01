@@ -271,6 +271,58 @@ const series = [
 <Chart type="area" height={160} options={options} series={series} />
 ```
 
+# Formulários no React
+  - Controled components
+    - Monitora cada digitação em um input e salva no state
+    - Components que controla o estado deles
+      - Não da problema de performace  
+
+  - Uncontroled components
+    - Acessar o valor do input quando precisar
+      - Utilizando ref
+        - Como guarda uma referencia, precisar qual tipo de ref ele pertence
+      - Quando realizar submit, pegar o valor com *variavel_com_ref.current.value*
+      - Ex:
+      ```tsx
+      const searthInputRef = useRef<HTMLInputElement>(null)
+      console.log(searchInputRef.current.value)
+      // começa com null pq so vai ter valor quando input for construido que recebe o input dentro 
+      // no return passar ref no input
+      return(
+        <input ref={searchInputRef}></input>
+      )
+      ```
+  - Bibliotecas
+     - Ex: 
+      - formic
+      - react hook forms
+      - unform
+        - Formulários que estão precisando de melhora na performace
+
+# React hook form
+```sh
+yarn add react-hook-form
+# se utilizar yup
+yarn add @hookform/resolvers
+```
+
+# Yup
+```sh
+yarn add yup
+```
+
+- Confirmação senha yup
+```ts
+const createUserFormSchema = y.object().shape({
+  password: y.string().required('Senha obrigatória').min(6, 'No mínimo 6 caracteres'),
+  password_confirmation: y.string().oneOf([
+    // null quando montar o componente
+    // referenciando password
+    null, y.ref('password')
+  ], 'As senhas precisam ser iguais')
+})
+```
+
 # Dicas gerais
 - Tipar um elemento
 ```tsx
@@ -292,9 +344,39 @@ export function NavLink({ icon, children }: NavLinkProps) {
 }
 ```
 
+## Quando faz !!condicao && retorno
+  - Transforma string em boolean
+## Diferença ReactNode e ReactElement
+- ReactElement
+  - Precisa ser um componente react
+- ReactNode
+  - Pode ser um texto ou tags comuns tbm
+
+
 # Link
 - Quando passar um el sem ser o <a>, não mostra visualmente a rota no browser
   - Passar propriedade passHref
 ```tsx
 <Link href={href} passHref></Link>
+```
+
+# Mudar no cod
+- Antes pegar os erros
+```ts
+  const { register, formState, erros } = useForm({})
+```
+- Agr
+```ts
+  const { register, formState } = useForm({})
+  const { errors } = formState
+```
+
+- Ref input
+``` tsx
+// de 
+<input ref={register}></input>
+// para
+<input
+  {...register('name_field')}
+></input>
 ```

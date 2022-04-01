@@ -3,6 +3,7 @@ import Header from "../components/Header"
 import Sidebar from "../components/Sidebar"
 import dynamic from "next/dynamic"
 import { ApexOptions } from "apexcharts"
+import { useEffect, useState } from "react"
 // import Chart from 'react-apexcharts'
 
 const Chart = dynamic(() => import('react-apexcharts'), {
@@ -73,6 +74,12 @@ const series = [
 ]
 
 function Dashboad() {
+  const [assembleGraphics, setAssembleGraphics] = useState(false)
+
+  useEffect(() => {
+    setAssembleGraphics(true)
+  },[])
+  
   return (
     <Flex direction="column" h="100vh">
       <Header /> 
@@ -82,28 +89,30 @@ function Dashboad() {
         {/* Grid simples */}
         {/* flex=1 ocupar largura que sobrar */}
         {/* quando item menor 320px, quebra linha e coloca items a baixo */}
-        <SimpleGrid flex="1" gap="4" minChildWidth="320px">  
-          <Box
-            p={["6", "8"]}
-            bg="gray.800"
-            borderRadius={8}
-            pb="4"
-          >
-            <Text fontSize="lg" mb="4">Inscritos da semana</Text>
-            {/* serires dados do grafico */}
-            {/* options as configs */}
-            <Chart type="area" height={160} options={options} series={series} />
-          </Box>
-          <Box
-            p={["6", "8"]}
-            bg="gray.800"
-            borderRadius={8}
-          >
-            <Text fontSize="lg" mb="4">Taxa de abertura</Text>
-            <Chart type="area" height={160} options={options} series={series} />
-          </Box>
+        { assembleGraphics && (
+          <SimpleGrid flex="1" gap="4" minChildWidth="320px">  
+            <Box
+              p={["6", "8"]}
+              bg="gray.800"
+              borderRadius={8}
+              pb="4"
+            >
+              <Text fontSize="lg" mb="4">Inscritos da semana</Text>
+              {/* serires dados do grafico */}
+              {/* options as configs */}
+              <Chart type="area" height={160} options={options} series={series} />
+            </Box>
+            <Box
+              p={["6", "8"]}
+              bg="gray.800"
+              borderRadius={8}
+            >
+              <Text fontSize="lg" mb="4">Taxa de abertura</Text>
+              <Chart type="area" height={160} options={options} series={series} />
+            </Box>
 
-        </SimpleGrid>
+          </SimpleGrid>
+        )}
       </Flex>  
     </Flex>
   )
