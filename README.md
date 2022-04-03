@@ -1,6 +1,5 @@
 # Chakra UI
 - Construida em cima emotion (parecido com styled components)
-
 ## Configuraçao Chakra UI
 - Instalação
 ```sh
@@ -299,16 +298,9 @@ const series = [
       - unform
         - Formulários que estão precisando de melhora na performace
 
-# React hook form
+# React hook form + Yup
 ```sh
-yarn add react-hook-form
-# se utilizar yup
-yarn add @hookform/resolvers
-```
-
-# Yup
-```sh
-yarn add yup
+yarn add react-hook-form && yarn add @hookform/resolvers && yarn add yup
 ```
 
 - Confirmação senha yup
@@ -358,25 +350,4 @@ export function NavLink({ icon, children }: NavLinkProps) {
   - Passar propriedade passHref
 ```tsx
 <Link href={href} passHref></Link>
-```
-
-# Mudar no cod
-- Antes pegar os erros
-```ts
-  const { register, formState, erros } = useForm({})
-```
-- Agr
-```ts
-  const { register, formState } = useForm({})
-  const { errors } = formState
-```
-
-- Ref input
-``` tsx
-// de 
-<input ref={register}></input>
-// para
-<input
-  {...register('name_field')}
-></input>
 ```
