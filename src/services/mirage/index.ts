@@ -1,4 +1,4 @@
-import { createServer, Model, Factory, Response } from 'miragejs'
+import { createServer, Model, Factory, Response, ActiveModelSerializer } from 'miragejs'
 import faker from 'faker'
 
 type User = {
@@ -8,6 +8,9 @@ type User = {
 }
 export function makeServer() {
   const server = createServer({
+    serializers: {
+      application: ActiveModelSerializer
+    },
     models: {
       // partial, vai conter os campos user, mas tlvz não todos
       user: Model.extend<Partial<User>>({
@@ -52,6 +55,7 @@ export function makeServer() {
           { users }
         )
       });
+      this.get('/users/:id');
       this.post('/users');
 
       // resetar namespace p não dar conflito api do next

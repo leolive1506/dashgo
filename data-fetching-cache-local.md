@@ -75,6 +75,81 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 ```
 
+## Fazer um prefetch de um elemento
+```tsx
+<Link color="purple.400" onMouseEnter={() => handlePrefetchUser(Number(user.id))}>
+  <Text fontWeight="bold">{user.name}</Text>
+</Link>
+```
+```tsx
+async function handlePrefetchUser(userId: number) {
+  await queryClient.prefetchQuery(['user', userId], async () => {
+    const response = await api.get(`users/${userId}`)
+    return response.data
+  }, {
+    staleTime: 1000 * 60 * 10 // 10min
+  })
+}
+```
+
+## Mutations
+- ação na api quando não é de busca (criar, alterar, deletar)
+```ts
+const router = useRouter()
+// const createUser = useMutation(funca_que_vai_executar)
+const createUser = useMutation(async (user: CreateUserFormData) => {
+  const { data } = await api.post('users', {
+    user: {
+      ...user,
+      created_at: new Date()
+    }
+  })
+
+  return data
+}, {
+  onSuccess: () => {
+    // após add é preciso invalidar uma query(dados em cache)
+    // queryClient.invalidateQueries(['users', 1]) //  invalida so a primeira pag
+    queryClient.invalidateQueries('users')
+  }
+})  
+
+const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values, event) => {
+  await createUser.mutateAsync(values)
+  router.push('/users')
+}
+```
+
+## Integração React query + SSR
+- Por padrão use query não funciona no SSR pq é um hook e roda so lado cliente
+- Na query
+```ts
+export function useUsers(page: number, options?: UseQueryOptions) {
+  return useQuery(['users', page], () => getUsers(page), {
+    staleTime: 1000 * 60 * 10, // 10min
+    // initialData fica dentro usequeyroption, quando passa ele e executa do lado server nextjs, a primeira reqnão aconte lado cliente
+    ...options
+  })
+}
+```
+- Na pag
+```tsx 
+// const query = useQuery('nome_chava_no_cache', funcção que vai retornar os dados)
+const { data, isLoading, error, isFetching } = useUsers(page, {
+  initialData: users
+})
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { users, totalCount } = await getUsers(1)
+
+  return { 
+    props: {
+      users,
+      totalCount
+    }
+  }
+}
+```
+
 ## [Devtools](https://react-query.tanstack.com/devtools)
 - Importa e colocar dentro do provider do react query em _app
 ```tsx

@@ -1,5 +1,5 @@
-import { useQuery } from "react-query"
-import { api } from "../api"
+import { useQuery, UseQueryOptions } from "react-query"
+import { api } from '../../services/api'
 type User = {
   id: string
   name: string
@@ -35,8 +35,10 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
       totalCount
     }
 }
-export function useUsers(page: number) {
+export function useUsers(page: number, options?: UseQueryOptions) {
   return useQuery(['users', page], () => getUsers(page), {
-    staleTime: 1000 * 5 // 5 seg
+    staleTime: 1000 * 60 * 10, // 10min
+    // initialData fica dentro usequeyroption, quando passa ele e executa do lado server nextjs, a primeira reqnão aconte lado cliente
+    // ...options
   })
 }

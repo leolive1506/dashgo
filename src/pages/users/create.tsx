@@ -8,6 +8,11 @@ import { Input } from "../../components/Form/Input";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 
+import { useMutation } from 'react-query'
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
+import { useRouter } from "next/router";
+
 type CreateUserFormData = {
   name: string
   email: string
@@ -25,16 +30,36 @@ const createUserFormSchema = y.object().shape({
   ], 'As senhas precisam ser iguais')
 })
 
-function CreateUserUserList() {
+function CreateUser() {
+  const router = useRouter()
+  // const createUser = useMutation(funca_que_vai_executar)
+  const createUser = useMutation(async (user: CreateUserFormData) => {
+    const { data } = await api.post('users', {
+      user: {
+        ...user,
+        created_at: new Date()
+      }
+    })
+
+    return data
+  }, {
+    onSuccess: () => {
+      // queryClient.invalidateQueries(['users', 1]) //  invalida so a primeira pag
+      queryClient.invalidateQueries('users')
+    }
+  })  
+
+  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values, event) => {
+    await createUser.mutateAsync(values)
+    router.push('/users')
+  }
+
   const { register, handleSubmit, formState} = useForm({
     resolver: yupResolver(createUserFormSchema),
     mode: 'onChange'
   })
   const { errors } = formState
-  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values, event) => {
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    console.log(values)
-  }
+
   return (
     <Box>
       <Header />
@@ -105,4 +130,4 @@ function CreateUserUserList() {
   )
 }
 
-export default CreateUserUserList
+export default CreateUser
