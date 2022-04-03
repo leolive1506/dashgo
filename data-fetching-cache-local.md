@@ -28,6 +28,16 @@
   - Revalida os dados por baixo do pano
   - Atualiza em tela enquanto ja aprenta os dados guardados em cache
 - Assume que todos dados ja estão obsoletos (precisam ser atualizados assim q der foco)
+- Alterar
+```tsx
+  const { data, isLoading, error, isFetching } = useQuery('users' , async () => {
+    const response = await fetch('http://localhost:3000/api/users')
+    const data = await response.json()
+    return data
+  }, {
+    staleTime: 1000 * 5 // 5 seg
+  })
+```
 ### Foco na aba
 - Quando o usuário não atualiza a tela, mas quando retorna e da um foco a ela
   - Faz uma nova req e atualiza os dados
@@ -65,11 +75,25 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 ```
 
-
 ## [Devtools](https://react-query.tanstack.com/devtools)
 - Importa e colocar dentro do provider do react query em _app
 ```tsx
 import { ReactQueryDevtools } from 'react-query/devtools'
+```
+
+## Sinalizar p usuários estados de carregamento
+```tsx
+  const { data, isLoading, error, isFetching } = useQuery('users' , async () => {
+    const response = await fetch('http://localhost:3000/api/users')
+    const data = await response.json()
+    return data
+  }, {
+    staleTime: 1000 * 5 // 5 seg
+  })
+```
+```ts
+{ isLoading && <Spinner size="sm" color="gray.500" ml="4" /> } // carregamento inicial
+{ !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4" /> } // somente atualização
 ```
 
 # Miragejs usando faker

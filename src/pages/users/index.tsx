@@ -5,27 +5,11 @@ import { RiAddLine } from "react-icons/ri";
 import Header from "../../components/Header";
 import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
-import { useQuery } from 'react-query'
+import { useUsers } from "../../services/hooks/useUsers";
 
 function UserList() {
   // const query = useQuery('nome_chava_no_cache', funcção que vai retornar os dados)
-  const { data, isLoading, error } = useQuery('users' , async () => {
-    const response = await fetch('http://localhost:3000/api/users')
-    const data = await response.json()
-    const users = data.users.map(user => {
-      return {
-        ...user,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        })
-      }
-    })
-    return users
-  }, {
-    staleTime: 1000 * 5 // 5 seg
-  })
+  const { data, isLoading, error, isFetching } = useUsers()
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -40,7 +24,10 @@ function UserList() {
 
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align="center">
-            <Heading size="lg" fontWeight="normal">Usuários</Heading>
+            <Heading size="lg" fontWeight="normal">
+              Usuários
+              { !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4" /> }
+            </Heading>
             <Link href="/users/create" passHref>
               <Button 
                 as="a" 
@@ -94,7 +81,11 @@ function UserList() {
                     
                 </Tbody>
               </Table>
-              <Pagination />
+              <Pagination 
+                totalCountOfRegister={200}
+                currentPage={5}
+                onPageChange={() => {}}
+              />
             </>
           )}
         </Box>
